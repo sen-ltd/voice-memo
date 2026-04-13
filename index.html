@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>音声メモ — Voice Memo</title>
+  <meta name="description" content="Voice memo app with MediaRecorder, IndexedDB storage, and Web Speech API transcription." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="header-inner">
+        <h1 class="app-title" data-i18n="appTitle">音声メモ</h1>
+        <p class="app-subtitle" data-i18n="appSubtitle">MediaRecorder + IndexedDB + Web Speech API</p>
+      </div>
+      <button id="langToggle" class="btn-lang">English</button>
+    </header>
+
+    <!-- Record Section -->
+    <section class="record-section" aria-label="Recording">
+      <button id="recordBtn" class="record-btn" type="button" aria-label="Start recording">
+        <span class="record-icon"></span>
+        <span id="recordLabel" class="record-btn-label" data-i18n="recordStart">録音開始</span>
+      </button>
+
+      <div id="recordingIndicator" class="recording-indicator" hidden>
+        <span class="pulse-dot"></span>
+        <span data-i18n="recording">録音中...</span>
+      </div>
+
+      <div id="timerDisplay" class="timer-display" hidden>00:00</div>
+
+      <canvas id="liveWaveform" class="live-waveform" width="600" height="80" hidden
+        aria-label="Live audio waveform" role="img"></canvas>
+    </section>
+
+    <!-- Storage info -->
+    <div id="storageDisplay" class="storage-display"></div>
+
+    <!-- Memo List -->
+    <section class="memo-section" aria-label="Saved memos">
+      <div id="emptyState" class="empty-state" data-i18n="noMemos" hidden>
+        音声メモがありません。録音ボタンを押して開始してください。
+      </div>
+      <div id="memoList" class="memo-list" role="list"></div>
+    </section>
+
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

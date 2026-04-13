@@ -1,0 +1,566 @@
+/* ─── Reset & base ─────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #121212;
+  --bg-card: #1e1e1e;
+  --bg-card-hover: #252525;
+  --bg-input: #2a2a2a;
+  --border: #333;
+  --text: #e0e0e0;
+  --text-muted: #888;
+  --accent: #e74c3c;
+  --accent-hover: #c0392b;
+  --accent-secondary: #3498db;
+  --success: #27ae60;
+  --danger: #c0392b;
+  --tag-bg: #2c3e50;
+  --tag-text: #7fb3d3;
+  --radius: 8px;
+  --radius-sm: 4px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  --transition: 0.2s ease;
+  font-size: 16px;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue',
+    'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ─── App layout ───────────────────────────────────────────────────────────── */
+
+.app {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 16px 64px;
+}
+
+/* ─── Header ───────────────────────────────────────────────────────────────── */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.header-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.app-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.app-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.btn-lang {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.btn-lang:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+/* ─── Record section ───────────────────────────────────────────────────────── */
+
+.record-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 0;
+}
+
+.record-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  background: var(--bg-card);
+  color: var(--accent);
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+}
+
+.record-btn:hover {
+  background: rgba(231, 76, 60, 0.1);
+  transform: scale(1.04);
+}
+
+.record-btn.recording {
+  background: var(--accent);
+  color: #fff;
+  animation: pulse-ring 1.5s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.5); }
+  70% { box-shadow: 0 0 0 18px rgba(231, 76, 60, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+}
+
+.record-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: border-radius var(--transition);
+}
+
+.record-btn.recording .record-icon {
+  border-radius: var(--radius-sm);
+}
+
+.record-btn-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* Recording indicator */
+
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+/* Timer */
+
+.timer-display {
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+/* Live waveform canvas */
+
+.live-waveform {
+  width: 100%;
+  max-width: 600px;
+  height: 80px;
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  display: block;
+}
+
+/* ─── Storage display ──────────────────────────────────────────────────────── */
+
+.storage-display {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+/* ─── Memo list ────────────────────────────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 48px 16px;
+  font-size: 0.95rem;
+}
+
+.memo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Memo item card ───────────────────────────────────────────────────────── */
+
+.memo-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color var(--transition);
+}
+
+.memo-item:hover {
+  border-color: #444;
+}
+
+/* Header row */
+
+.memo-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.memo-label {
+  flex: 1;
+  min-width: 160px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 6px 10px;
+  transition: border-color var(--transition);
+}
+
+.memo-label:focus {
+  outline: none;
+  border-color: var(--accent-secondary);
+}
+
+.memo-meta {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.memo-duration {
+  font-variant-numeric: tabular-nums;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Tags */
+
+.memo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border-radius: 12px;
+  padding: 2px 10px 2px 10px;
+  font-size: 0.75rem;
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: var(--tag-text);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0;
+  opacity: 0.6;
+}
+
+.tag-remove:hover {
+  opacity: 1;
+}
+
+.btn-tag-add {
+  background: none;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 2px 10px;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.btn-tag-add:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.tag-input {
+  background: var(--bg-input);
+  border: 1px solid var(--accent-secondary);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 0.75rem;
+  padding: 2px 10px;
+  width: 100px;
+}
+
+.tag-input:focus {
+  outline: none;
+}
+
+/* Waveform thumbnail */
+
+.memo-waveform {
+  width: 100%;
+  max-width: 100%;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: #1a1a1a;
+  display: block;
+}
+
+/* Playback row */
+
+.memo-playback {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-icon {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+.btn-icon:hover {
+  background: var(--border);
+}
+
+.memo-scrubber {
+  flex: 1;
+  height: 4px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.playback-time {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  color: var(--text-muted);
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+/* Transcription */
+
+.memo-transcription {
+  background: #1a1a1a;
+  border-left: 3px solid var(--accent-secondary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* Action buttons */
+
+.memo-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 5px 12px;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.btn-sm:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
+.btn-sm:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.btn-danger {
+  color: var(--danger);
+  border-color: rgba(192, 57, 43, 0.4);
+}
+
+.btn-danger:hover {
+  background: rgba(192, 57, 43, 0.15);
+  border-color: var(--danger);
+  color: #e74c3c;
+}
+
+/* ─── Toast notifications ──────────────────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 1000;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.toast.toast-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.toast-success {
+  border-color: var(--success);
+}
+
+.toast.toast-error {
+  border-color: var(--danger);
+  color: #e74c3c;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+/* ─── Range input ──────────────────────────────────────────────────────────── */
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  border: none;
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .memo-header {
+    flex-direction: column;
+  }
+
+  .record-btn {
+    width: 100px;
+    height: 100px;
+  }
+
+  .timer-display {
+    font-size: 1.5rem;
+  }
+}
