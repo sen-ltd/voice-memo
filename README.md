@@ -70,3 +70,10 @@ src/
 ## License
 
 MIT © 2026 SEN LLC (SEN 合同会社)
+
+<!-- sen-publish:links -->
+## Links
+
+- 🌐 Demo: https://sen.ltd/portfolio/voice-memo/
+- 📝 dev.to: https://dev.to/sendotltd/a-voice-memo-app-with-mediarecorder-indexeddb-and-live-waveform-rendering-1429
+<!-- /sen-publish:links -->
