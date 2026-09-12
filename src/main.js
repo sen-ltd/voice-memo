@@ -38,6 +38,7 @@ const liveCanvas = document.getElementById('liveWaveform');
 const timerDisplay = document.getElementById('timerDisplay');
 const memoList = document.getElementById('memoList');
 const emptyState = document.getElementById('emptyState');
+const transcribeNote = document.getElementById('transcribeNote');
 const storageDisplay = document.getElementById('storageDisplay');
 const langToggleBtn = document.getElementById('langToggle');
 
@@ -178,10 +179,12 @@ async function renderMemoList() {
   if (memos.length === 0) {
     emptyState.hidden = false;
     emptyState.textContent = t('noMemos', lang);
+    transcribeNote.hidden = true;
     return;
   }
 
   emptyState.hidden = true;
+  transcribeNote.hidden = false;
 
   for (const memo of memos) {
     const item = buildMemoItem(memo);
@@ -421,11 +424,23 @@ async function handleTranscribe(memo, item, btn) {
     return;
   }
 
+  // The recogniser listens to the microphone, so anything else coming out of
+  // the speakers would end up in the transcript too.
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio = null;
+    currentPlayingId = null;
+  }
+
   btn.disabled = true;
   btn.textContent = t('transcribing', lang);
 
   try {
     const text = await transcribeBlob(memo.blob, getSpeechLang(lang));
+    if (!text) {
+      showToast(t('transcriptionEmpty', lang), 'error');
+      return;
+    }
     await updateMemo(memo.id, { transcription: text });
 
     // Update or add transcription display
@@ -446,12 +461,20 @@ async function handleTranscribe(memo, item, btn) {
 }
 
 /**
- * Play the blob audio through the SpeechRecognition API.
- * This approach plays the audio and captures speech during playback.
+ * Transcribe a recorded blob by playing it back and letting SpeechRecognition
+ * listen to it.
+ *
+ * SpeechRecognition has no file input — it only ever listens to the microphone —
+ * so this is an acoustic loopback: speaker out, microphone in. That puts the
+ * playback path inside the result. Headphones, a muted microphone, echo
+ * cancellation or a routing change (Bluetooth, external interface) can drop
+ * words or return nothing, and repeat runs of the same memo need not agree.
+ * Best-effort by construction; see `transcribeNote` in i18n.js for the warning
+ * shown to the user.
  *
  * @param {Blob} blob
  * @param {string} speechLang  BCP-47 language code
- * @returns {Promise<string>}
+ * @returns {Promise<string>}  Recognised text, or '' if nothing was heard
  */
 function transcribeBlob(blob, speechLang) {
   return new Promise((resolve, reject) => {
@@ -482,7 +505,7 @@ function transcribeBlob(blob, speechLang) {
 
     recognition.onend = () => {
       URL.revokeObjectURL(url);
-      resolve(transcript.trim() || '(no speech detected)');
+      resolve(transcript.trim());
     };
 
     audio.onended = () => recognition.stop();
@@ -522,7 +545,10 @@ async function handleDelete(id, item) {
   await deleteMemo(id);
   item.remove();
   const remaining = memoList.querySelectorAll('.memo-item').length;
-  if (remaining === 0) emptyState.hidden = false;
+  if (remaining === 0) {
+    emptyState.hidden = false;
+    transcribeNote.hidden = true;
+  }
   await updateStorageDisplay();
 }
 

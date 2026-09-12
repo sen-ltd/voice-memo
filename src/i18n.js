@@ -41,6 +41,8 @@ export const TRANSLATIONS = {
     transcriptionDone: '文字起こし完了',
     transcriptionError: '文字起こしに失敗しました（ブラウザ非対応の可能性があります）',
     transcriptionUnavailable: 'このブラウザは音声認識に対応していません',
+    transcriptionEmpty: '音声を認識できませんでした。スピーカーから再生されているか、ヘッドホン接続やエコーキャンセルで音がマイクに届いていないかを確認してください。',
+    transcribeNote: '⚠ 文字起こしの仕組み: Web Speech API は音声ファイルを直接受け取れないため、メモをスピーカーで再生し、その音をマイクで拾い直しています。ヘッドホン接続時・マイクミュート時・エコーキャンセルが効いている環境では単語が欠けたり結果が空になったりし、同じメモでも実行ごとに結果が変わります。静かな環境でスピーカー再生してお試しください。',
     transcription: '文字起こし',
 
     // Delete confirmation
@@ -107,6 +109,8 @@ export const TRANSLATIONS = {
     transcriptionDone: 'Transcription complete',
     transcriptionError: 'Transcription failed (browser may not support it)',
     transcriptionUnavailable: 'This browser does not support speech recognition',
+    transcriptionEmpty: 'No speech was recognised. Check that the memo is playing through your speakers, and that headphones or echo cancellation are not keeping the audio away from the microphone.',
+    transcribeNote: '⚠ How transcription works: the Web Speech API cannot read an audio file, so the memo is played back through your speakers and picked up again by the microphone. With headphones plugged in, the mic muted, or echo cancellation active, words can be dropped or the result can come back empty — and the same memo may transcribe differently on the next run. Play through speakers in a quiet room.',
     transcription: 'Transcription',
 
     // Delete confirmation

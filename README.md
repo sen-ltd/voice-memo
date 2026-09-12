@@ -11,7 +11,7 @@ Voice memo app built with vanilla JavaScript — zero dependencies, no build ste
 - **Save** recordings to IndexedDB (handles large audio blobs)
 - **Playback** with scrubber and play/pause controls
 - **Label and tag** memos with inline editing
-- **Transcription** using Web Speech API (best-effort, browser-dependent)
+- **Transcription** using Web Speech API (best-effort speaker→mic loopback — see caveats below)
 - **Delete / rename** memos
 - **Export** audio as WebM/OGG/MP4 (browser-native format)
 - **Total storage used** display
@@ -38,6 +38,31 @@ Voice memo app built with vanilla JavaScript — zero dependencies, no build ste
 | OfflineAudioContext | ✅ | ✅ | ✅ |
 
 > Transcription is best-effort and depends on the browser's SpeechRecognition implementation. Chrome has the best support.
+
+## How transcription works (and why it is not reproducible)
+
+`SpeechRecognition` has no file input. It only ever listens to the microphone.
+So transcribing a saved memo is an **acoustic loopback**: the blob is played
+back through the speakers and the recogniser picks it up again through the mic.
+
+That puts the playback path inside the result:
+
+| Condition | Effect on the transcript |
+|-----------|--------------------------|
+| Headphones plugged in | The mic hears nothing → empty result |
+| Microphone muted / wrong input device | Empty result |
+| OS or browser echo cancellation active | The playback is treated as echo and suppressed → dropped or quiet words |
+| Output routed to Bluetooth / an external interface mid-run | Level changes → words dropped |
+| Background noise, speaker volume, room | Wording varies between runs |
+
+The same memo can therefore transcribe differently on the next run. The app
+states this in the UI above the memo list, stops any playing memo before it
+starts, and reports an empty result as a failure with a hint rather than
+storing a placeholder.
+
+For a reproducible transcript, send the blob to a server-side recogniser
+(Whisper and the cloud speech APIs all take a file); the Web Speech API cannot
+do it from a file in the browser.
 
 ## Setup
 

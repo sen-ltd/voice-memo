@@ -28,6 +28,12 @@
   font-size: 16px;
 }
 
+/* Class-level `display` rules (.recording-indicator, .live-waveform) otherwise
+   beat the UA stylesheet and leave `hidden` elements on screen. */
+[hidden] {
+  display: none !important;
+}
+
 html, body {
   height: 100%;
 }
@@ -221,6 +227,18 @@ body {
   color: var(--text-muted);
   padding: 48px 16px;
   font-size: 0.95rem;
+}
+
+.transcribe-note {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-secondary);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.6;
 }
 
 .memo-list {
